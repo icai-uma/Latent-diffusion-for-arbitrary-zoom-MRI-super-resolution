@@ -78,7 +78,7 @@ def resolve(model, lr_batch):
 
 config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth = True
-session = tf.compat.v1.Session(config=config) #v verziji 2 so določene funkcije odstranjene zato malo drugačen klic
+session = tf.compat.v1.Session(config=config) 
 
 
 def edsr_f(imagen_jpg,edsr):

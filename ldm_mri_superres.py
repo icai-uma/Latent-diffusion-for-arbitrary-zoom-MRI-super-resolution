@@ -17,7 +17,6 @@ from einops import rearrange, repeat
 import cv2
 from edsr import edsr 
 
-
 def get_parser(**parser_kwargs):
     def str2bool(v):
         if isinstance(v, bool):
@@ -116,12 +115,11 @@ def load_img(path):
     return 2.*image - 1.
 
 def get_number(element):
-        return int(element.split('_')[1])
+        return int(element.split('_')[-1].split('.')[0])
 
 if __name__ == "__main__":
     parser = get_parser()
     opt = parser.parse_args()
-
 
     transform = torchvision.transforms.Compose([
             torchvision.transforms.Resize(opt.input_size // 4),
@@ -129,10 +127,8 @@ if __name__ == "__main__":
 
     t_enc = int(opt.ddim_steps)
 
-
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
     config = OmegaConf.load(f"{opt.config_path}")
-
 
 
 ################### LOADING LDM
@@ -140,15 +136,11 @@ if __name__ == "__main__":
     model = load_model_from_config(config, f"{opt.ckpt_path}")
     sampler = DDIMSampler(model)
 
-
-
 ################### LOADING EDSR
-
 
     edsr_model= edsr.edsr(scale=1, num_res_blocks=16)
 
     edsr_model.load_weights(opt.edsr_path)
-
 
 ################### Preparing the execution
 
@@ -226,10 +218,10 @@ if __name__ == "__main__":
         value_0 = samples[j].to(device)
         value_1 = samples[j+1].to(device)
 
-        interpolated_points = torch.linspace(0, 1, opt.n).unsqueeze(1).unsqueeze(2).unsqueeze(3).to(device)
+        interpolated_points = torch.linspace(0, 1, opt.n_slides_generated).unsqueeze(1).unsqueeze(2).unsqueeze(3).to(device)
         new_values= value_0 + interpolated_points * (value_1 - value_0)
 
-        new_tensor = new_values.reshape(opt.n, 3, 64, 64)    
+        new_tensor = new_values.reshape(opt.n_slides_generated, 3, 64, 64)    
     
         x_samples = model.decode_first_stage(new_tensor)
         x_samples = torch.clamp((x_samples + 1.0) / 2.0, min=0.0, max=1.0)
@@ -257,7 +249,4 @@ if __name__ == "__main__":
     final_image = np.clip(image, 0, 255).astype(np.uint8)
 
     Image.fromarray(final_image).save(
-        os.path.join(output_directory, f"{file_name}.png"))                          
-
-
-
+        os.path.join(output_directory, f"{file_name}_0.png"))                          

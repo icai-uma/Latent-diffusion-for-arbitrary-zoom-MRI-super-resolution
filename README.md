@@ -19,6 +19,9 @@ Quantitative analysis for the ATLAS dataset:
 Qualitative analysis for the ATLAS dataset:
 <img src = "./figs/ATLAS_resume.png" width="100%"/>
 
+Sample for the BRATS dataset:
+<img src = "./figs/brats_Flair_11.png" width="100%"/>
+
 
 ## Use the model
 
@@ -34,7 +37,7 @@ python inference.py --input_size -n <number of interpolated slices> --ddim_eta -
 python main.py --base <config of the model> -t --name <name of the trained model> --train --scale_lr True
 ```
 
-**Important**: An example of the configs of the model can be found at models/ldm/bsr_sr/config_original.yaml.Similarly, an example of the Dataset used for the model can be found at ldm/data/datasetsr.py
+**Important**: An example of the configs of the model can be found at models/ldm/bsr_sr/config_original.yaml. Similarly, an example of the Dataset used for the model can be found at ldm/data/datasetsr.py
 
 
 ## Download the datasets

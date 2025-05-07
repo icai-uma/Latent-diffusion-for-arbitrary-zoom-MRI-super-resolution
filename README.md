@@ -1,6 +1,6 @@
 # Latent diffusion for arbitrary zoom MRI super resolution
 
-**[Expert Systems with Applications 2025]** **[[paper preview(pending link)]()]**
+**[Expert Systems with Applications 2025]** **[[paper](https://doi.org/10.1016/j.eswa.2025.127970)]**
 
 ## Proposed Architecture
 <p align="center">
